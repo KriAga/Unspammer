@@ -32,10 +32,10 @@ profile.update_preferences()
 
 
 # driver = webdriver.Firefox(capabilities=firefox_capabilities )
-driver = webdriver.Firefox(firefox_profile=profile, executable_path="D:\\Miscellaneous\\Work\\Shibani\\Freelancer\\google-login\\geckodriver.exe")
-driver.get("https://mail.google.com/mail/u/1/h/pq3m1hldlteh/")
-driver.maximize_window()
-email_phone = driver.find_element_by_xpath("//input[@id='identifierId']")
+# driver = webdriver.Firefox(firefox_profile=profile, executable_path="D:\\Miscellaneous\\Work\\Shibani\\Freelancer\\google-login\\geckodriver.exe")
+# driver.get("https://mail.google.com/mail/u/1/h/pq3m1hldlteh/")
+# driver.maximize_window()
+# email_phone = driver.find_element_by_xpath("//input[@id='identifierId']")
 
 with open('emails.csv', 'r+') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
