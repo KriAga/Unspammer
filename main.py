@@ -26,6 +26,8 @@ profile.set_preference("network.proxy.http", proxy)
 profile.set_preference("network.proxy.http_port", port)
 profile.set_preference("network.proxy.ssl", proxy)
 profile.set_preference("network.proxy.ssl_port", port)
+profile.setPreference("network.proxy.socks", proxy);
+profile.setPreference("network.proxy.socks_port", port);
 profile.update_preferences()
 
 
