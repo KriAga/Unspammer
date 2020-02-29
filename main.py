@@ -38,6 +38,10 @@ email_phone = driver.find_element_by_xpath("//input[@id='identifierId']")
 with open('emails.csv', 'r+') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     for row in csv_reader:
+        driver = webdriver.Firefox(firefox_profile=profile, executable_path="D:\\Miscellaneous\\Work\\Shibani\\Freelancer\\google-login\\geckodriver.exe")
+        driver.get("https://mail.google.com/mail/u/1/h/pq3m1hldlteh/")
+        driver.maximize_window()
+        email_phone = driver.find_element_by_xpath("//input[@id='identifierId']")
         email_phone.send_keys(row[0])
         driver.find_element_by_id("identifierNext").click()
         password = WebDriverWait(driver, 5).until(
@@ -49,3 +53,4 @@ with open('emails.csv', 'r+') as csv_file:
         while driver.find_element_by_xpath("//input[@type='checkbox']"):
             driver.find_element_by_xpath("//input[@type='checkbox']").click()
             driver.find_element_by_xpath("//*[contains(text(), 'Not Spam')] | //*[@value='Not Spam']").click()
+        driver.close()
