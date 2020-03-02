@@ -12,26 +12,37 @@ from selenium.common.exceptions import TimeoutException
 failure_flag = False
 failed_emails = []
 failed_pass = []
-
-proxy = "89.33.192.56"
-port = "3128"
-profile = webdriver.FirefoxProfile()
-profile.set_preference("network.proxy.type", 1)
-profile.set_preference("network.proxy.http", proxy)
-profile.set_preference("network.proxy.http_port", port)
-profile.set_preference("network.proxy.ssl", proxy)
-profile.set_preference("network.proxy.ssl_port", port)
-profile.set_preference("network.proxy.socks", proxy);
-profile.set_preference("network.proxy.socks_port", port);
-profile.update_preferences()
-
-        
+  
 mail_type = 0   # 0 for Gmail and 1 for Hotmail/Outlook
 with open('emails.csv', 'r+') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     for row in csv_reader:
         print('Started for', row[0])
-        driver = webdriver.Firefox(firefox_profile=profile, executable_path="geckodriver.exe")
+        if row[4] == 1:
+            proxy = row[2]
+            port = int(row[3])
+            myProxy = proxy+":"+port
+
+            proxy_prop = Proxy({
+                'proxyType': ProxyType.MANUAL,
+                'httpProxy': myProxy,
+                'ftpProxy': myProxy,
+                'sslProxy': myProxy,
+                'noProxy': '' # set this value as desired
+                })
+            # profile = webdriver.FirefoxProfile()
+            # profile.set_preference("network.proxy.type", 1)
+            # profile.set_preference("network.proxy.http", proxy)
+            # profile.set_preference("network.proxy.http_port", port)
+            # profile.set_preference("network.proxy.ssl", proxy)
+            # profile.set_preference("network.proxy.ssl_port", port)
+            # profile.set_preference("network.proxy.socks", proxy);
+            # profile.set_preference("network.proxy.socks_port", port);
+            # profile.update_preferences()
+            # driver = webdriver.Firefox(firefox_profile=profile, executable_path="geckodriver.exe")
+            driver = webdriver.Firefox(proxy=proxy_prop, executable_path="geckodriver.exe")
+        else:
+            driver = webdriver.Firefox(executable_path="geckodriver.exe")
         passed = False
         try:
             if row[0].split('@')[-1] == 'gmail.com':
