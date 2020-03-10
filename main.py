@@ -8,6 +8,8 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.proxy import *
+from selenium.webdriver.common.proxy import Proxy, ProxyType
 
 failure_flag = False
 failed_emails = []
@@ -18,29 +20,39 @@ with open('emails.csv', 'r+') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     for row in csv_reader:
         print('Started for', row[0])
-        if row[4] == 1:
+        if row[4] == int(1):
             proxy = row[2]
             port = int(row[3])
-            myProxy = proxy+":"+port
+            myProxy = proxy + ":" + str(port)
+            print(proxy, port)
+            # firefox_capabilities = webdriver.DesiredCapabilities.FIREFOX
+            # firefox_capabilities['marionette'] = True
 
-            proxy_prop = Proxy({
-                'proxyType': ProxyType.MANUAL,
-                'httpProxy': myProxy,
-                'ftpProxy': myProxy,
-                'sslProxy': myProxy,
-                'noProxy': '' # set this value as desired
-                })
-            # profile = webdriver.FirefoxProfile()
-            # profile.set_preference("network.proxy.type", 1)
-            # profile.set_preference("network.proxy.http", proxy)
-            # profile.set_preference("network.proxy.http_port", port)
+            # firefox_capabilities['proxy'] = {
+            #     "proxyType": "MANUAL",
+            #     "httpProxy": proxy,
+            #     "ftpProxy": proxy,
+            #     "sslProxy": proxy
+            # }
+            # proxy_prop = Proxy({
+            #     'proxyType': ProxyType.MANUAL,
+            #     'httpProxy': myProxy,
+            #     'ftpProxy': myProxy,
+            #     'sslProxy': myProxy,
+            #     'noProxy': '' # set this value as desired
+            #     })
+            profile = webdriver.FirefoxProfile()
+            profile.set_preference("network.proxy.type", 1)
+            profile.set_preference("network.proxy.http", proxy)
+            profile.set_preference("network.proxy.http_port", port)
             # profile.set_preference("network.proxy.ssl", proxy)
             # profile.set_preference("network.proxy.ssl_port", port)
             # profile.set_preference("network.proxy.socks", proxy);
             # profile.set_preference("network.proxy.socks_port", port);
-            # profile.update_preferences()
-            # driver = webdriver.Firefox(firefox_profile=profile, executable_path="geckodriver.exe")
-            driver = webdriver.Firefox(proxy=proxy_prop, executable_path="geckodriver.exe")
+            profile.update_preferences()
+            driver = webdriver.Firefox(firefox_profile=profile)
+            # driver = webdriver.Firefox(proxy=proxy_prop, executable_path="geckodriver.exe")
+            # driver = webdriver.Firefox(capabilities=firefox_capabilities, executable_path="geckodriver.exe")
         else:
             driver = webdriver.Firefox(executable_path="geckodriver.exe")
         passed = False
@@ -114,7 +126,7 @@ with open('emails.csv', 'r+') as csv_file:
                         break
             else:
                 driver.get("https://outlook.live.com/mail/0/inbox")
-                
+                time.sleep(100)
                 sign_in = WebDriverWait(driver, 10).until(
                         EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Sign in')]")),
                         message="Sign in button not found"

@@ -1,7 +1,17 @@
 altgraph==0.17
+auto-py-to-exe==2.6.6
+bottle==0.12.18
+bottle-websocket==0.2.9
+cffi==1.14.0
+Eel==0.11.0
 future==0.18.2
+gevent==1.4.0
+gevent-websocket==0.10.1
+greenlet==0.4.15
 pefile==2019.4.18
+pycparser==2.19
 PyInstaller==3.6
 pywin32-ctypes==0.2.0
 selenium==3.141.0
 urllib3==1.25.8
+whichcraft==0.6.1
